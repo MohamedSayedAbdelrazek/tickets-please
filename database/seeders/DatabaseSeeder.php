@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Ticket;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,11 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $users=User::factory()->count(10)->create(); // create 10 users 
+        Ticket::factory()->count(100)->recycle($users)->create(); // create 100 tickets and assign a random user_id from created users
+       
     }
 }
