@@ -25,7 +25,6 @@ class StoreTicketRequest extends FormRequest
             "title"=>"required|string|max:255",
             "description"=>"required|string",
             "status"=>"required|in:Active,Completed,Hold,Canceled",
-            "user_id"=>"required|exists:users,id"
         ];
     }
 }

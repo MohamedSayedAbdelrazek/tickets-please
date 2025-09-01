@@ -20,8 +20,10 @@ class TicketController extends Controller
 
     public function store(StoreTicketRequest $request)
     {
-        //@TODO => Prevent the user_id to came from the request!
+
         $validatedData = $request->validated();
+        $validatedData['user_id'] = $request->user()->id;
+
         $ticket = Ticket::create($validatedData);
         return $this->ok($ticket, "Ticket Stored Successfully 🚀!", 201);
     }

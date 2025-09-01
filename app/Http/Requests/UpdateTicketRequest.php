@@ -24,7 +24,7 @@ class UpdateTicketRequest extends FormRequest
         return [   //@MAGIC
             "title" => "sometimes|string|max:255",
             "description" => "sometimes|string",
-            "status" => "sometimes|string",
+            "status" => "sometimes|string|in:Active,Completed,Hold,Canceled",
         ];
     }
 }
