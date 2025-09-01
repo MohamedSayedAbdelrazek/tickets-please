@@ -24,6 +24,9 @@ class TicketController extends Controller
         $validatedData = $request->validated();
         $validatedData['user_id'] = $request->user()->id;
 
+        if (!$request->user()->tokenCan('tickets.create')) {
+            return $this->errorResponse('Forbidden', [], 403);
+        }
         $ticket = Ticket::create($validatedData);
         return $this->ok($ticket, "Ticket Stored Successfully 🚀!", 201);
     }
@@ -38,13 +41,29 @@ class TicketController extends Controller
     {
         $validatedData = $request->validated();
         $ticket = Ticket::findOrFail($id);
+
+        if ($ticket->user_id !== $request->user()->id) {
+            return $this->errorResponse('You do not own this ticket', [], 403);
+        }
+        if (!$request->user()->tokenCan('tickets.update')) {
+            return $this->errorResponse('Forbidden', [], 403);
+        }
         $ticket->update($validatedData);
         return $this->ok($ticket, "Ticket Update Successfully ✅!", 200);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Ticket::findOrFail($id)->delete();
+        $ticket = Ticket::findOrFail($id);
+
+        if ($ticket->user_id !== $request->user()->id) {
+            return $this->errorResponse('You do not own this ticket', [], 403);
+        }
+        if (!$request->user()->tokenCan('tickets.delete')) {
+            return $this->errorResponse('Forbidden', [], 403);
+        }
+
+        $ticket->delete();
         return $this->ok([], "Ticket Deleted Successfully 🗑️!", 200);
     }
 }

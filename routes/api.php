@@ -17,9 +17,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(TicketController::class)->group(function () {
         Route::get('/tickets', 'index');
         Route::get('/tickets/{id}', 'show');
-        Route::post('/tickets', 'store');
-        Route::put('/tickets/{id}', 'update');
-        Route::delete('/tickets/{id}', 'destroy');
+        Route::post('/tickets', 'store')->middleware('abilities:tickets.create');
+;
+        Route::put('/tickets/{id}', 'update')->middleware('abilities:tickets.update');
+;
+        Route::delete('/tickets/{id}', 'destroy')->middleware('abilities:tickets.delete');
     });
     
 });
